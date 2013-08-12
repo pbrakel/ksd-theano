@@ -19,3 +19,9 @@ search directions to compute and the maximum number of BFGS iterations to
 perform.
 
 Please let me know if you find any bugs or have any questions about this code.
+
+To run the auto-encoder example you will need the file called digs3pts_1.mat
+which contains the Curves data. I'm very sorry but I can't remember where I
+downloaded that file. It shouldn't be difficult to port the example to another
+dataset of comparable size like MNIST.
+
