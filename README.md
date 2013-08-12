@@ -1,6 +1,5 @@
-<<<<<<< HEAD
-(KSDT) Krylov Subspace Descent using Theano.
-============================================
+(KSD-Theano) Krylov Subspace Descent using Theano.
+==================================================
 
 This is an implementation of the Krylov Subspace Descent method described in
 the AISTATS paper by Vinyals and Povey (2012). The code is loosely based on an implementation of the
@@ -25,10 +24,3 @@ To run the auto-encoder example you will need the file called digs3pts_1.mat
 which contains the Curves data. I'm very sorry but I can't remember where I
 downloaded that file. It shouldn't be difficult to port the example to another
 dataset of comparable size like MNIST.
-
-=======
-ksd-theano
-==========
-
-Krylov Subspace Descent for Theano
->>>>>>> cec82c7c038fc360f08a9c28c1d957f7cab735a5
