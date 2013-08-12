@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 (KSDT) Krylov Subspace Descent using Theano.
 ============================================
 
@@ -25,3 +26,9 @@ which contains the Curves data. I'm very sorry but I can't remember where I
 downloaded that file. It shouldn't be difficult to port the example to another
 dataset of comparable size like MNIST.
 
+=======
+ksd-theano
+==========
+
+Krylov Subspace Descent for Theano
+>>>>>>> cec82c7c038fc360f08a9c28c1d957f7cab735a5
