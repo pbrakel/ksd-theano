@@ -49,8 +49,8 @@ class Model(object):
         J_sqrt_Hv = map(T.as_tensor_variable, J_sqrt_Hv)  # for CudaNdarray
 
         self.function_J_sqrt_Hv = theano.function(inputs + [r],
-                                           J_sqrt_Hv, givens={},
-                                           on_unused_input='ignore')
+                                                  J_sqrt_Hv, givens={},
+                                                  on_unused_input='ignore')
         # compute Hv
         dp = T.grad(costs[0], p)
         total = 0
@@ -68,8 +68,9 @@ class Model(object):
         if type(delta) in (list, tuple):
             for i, d in zip(self.p, delta):
                 i.set_value(i.get_value() + np.asarray(d, dtype='float32'))
-        cost = np.sum([self.f_cost(*i)[0]
-                        for i in dataset.iterate(update=False)]) / dataset.number_batches
+        cost = (np.sum([self.f_cost(*i)[0]
+                       for i in dataset.iterate(update=False)]) /
+                dataset.number_batches)
         if type(delta) in (list, tuple):
             for i, d in zip(self.p, delta):
                 i.set_value(i.get_value() - np.asarray(d, dtype='float32'))
@@ -91,6 +92,7 @@ def get_subspace(matvec, b, K=10, precon=None, d_prev=None):
 
     The return values are the basis vectors and substitude Hessian in the
     subspace.
+
     """
     if precon is None:
         precon = lambda x: x
@@ -148,6 +150,7 @@ def floor_matrix(H, eps):
     H = np.dot(u * s, u.T)
     return H
 
+
 def floor_vector(v, eps):
     max_v = np.max(v)
     return np.asarray(map(lambda x: max(x, eps * max_v), v))
@@ -195,7 +198,8 @@ def krylov_descent(model, gradient_dataset, matvec_dataset, bfgs_dataset,
     def matvec_data(vector, dataset):
         v = model.flat_to_list(vector)
         result = 0
-        # TODO: experimental line to see if different batches for different matvecs works
+        # TODO: experimental line to see if different batches for different
+        # matvecs works
         for inputs in dataset.iterate(False):
             result += model.list_to_flat(
                 matvec(*(inputs + v + [0]))) / dataset.number_batches
@@ -241,7 +245,9 @@ def krylov_descent(model, gradient_dataset, matvec_dataset, bfgs_dataset,
                 for inputs in matvec_dataset.iterate(update=False):
                     for i in range(0, len(inputs[0]), batch):
                         inp = inputs[0][i:i+batch]
-                        v = np.asarray(np.sign(np.random.uniform(-1, 1, inp.shape)), dtype='float32')
+                        v = np.asarray(
+                            np.sign(np.random.uniform(-1, 1, inp.shape)),
+                            dtype='float32')
                         M += model.list_to_flat(
                             model.function_J_sqrt_Hv(inp, v)[:len(model.p)])**2
                         counter += 1
@@ -256,7 +262,6 @@ def krylov_descent(model, gradient_dataset, matvec_dataset, bfgs_dataset,
         def precon(v):
             return M * v
 
-
         print 'Computing subspace'
         P, H = get_subspace(matvec_wrapped, b,
                             space_size, precon, d_prev)
@@ -265,11 +270,11 @@ def krylov_descent(model, gradient_dataset, matvec_dataset, bfgs_dataset,
         a = np.zeros(H.shape[0])
 
         f_obj, f_prime = get_optimizer_functions(L, P, model.quick_cost,
-                get_grad_cost, bfgs_dataset)
+                                                 get_grad_cost, bfgs_dataset)
 
         print 'Running BFGS...'
         results = scipy.optimize.fmin_bfgs(f_obj, a, f_prime,
-                                             maxiter=maxfun, full_output=True)
+                                           maxiter=maxfun, full_output=True)
 
         a_optimal = results[0]
         print 'gnorm', norm(results[2])
